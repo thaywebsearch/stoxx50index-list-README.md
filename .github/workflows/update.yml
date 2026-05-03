@@ -2,30 +2,36 @@ name: Update STOXX 50 Dataset
 
 on:
   schedule:
-    - cron: "0 6 * * 1"
-  workflow_dispatch:
+    - cron: "0 6 * * 1"   # Atualiza todas as segundas às 06:00 UTC
+  workflow_dispatch:       # Permite correr manualmente
+
+permissions:
+  contents: write          # Necessário para commits automáticos
 
 jobs:
   update:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
       - name: Install dependencies
-        run: pip install requests beautifulsoup4 pandas
+        run: |
+          pip install requests beautifulsoup4 pandas lxml
 
       - name: Run update script
         run: python scripts/update_stoxx50.py
 
-      - name: Commit changes
+      - name: Commit and push changes
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "actions@github.com"
-          git add .
-          git commit -m "Auto-update STOXX 50 dataset" || echo "No changes"
+          git add data/*
+          git commit -m "Auto-update STOXX 50 dataset" || echo "No changes to commit"
           git push
