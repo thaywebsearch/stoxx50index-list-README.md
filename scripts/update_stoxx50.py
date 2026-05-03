@@ -2,22 +2,25 @@ import requests
 import pandas as pd
 from bs4 import BeautifulSoup
 from datetime import datetime
+from io import StringIO
 
 URL_PRIMARY = "https://www.stoxx.com/index-details?symbol=SX5E"
 URL_FALLBACK = "https://www.investing.com/indices/stoxx-50-components"
+URL_WIKIPEDIA = "https://en.wikipedia.org/wiki/EURO_STOXX_50"
+
 
 def fetch_from_stoxx():
     """Scrapes the official STOXX website."""
     try:
-        response = requests.get(URL_PRIMARY, timeout=10)
+        headers = {"User-Agent": "Mozilla/5.0"}
+        response = requests.get(URL_PRIMARY, headers=headers, timeout=10)
         soup = BeautifulSoup(response.text, "html.parser")
 
         table = soup.find("table")
         if table is None:
             return None
 
-        df = pd.read_html(str(table))[0]
-
+        df = pd.read_html(StringIO(str(table)))[0]
         df.columns = [c.lower().replace(" ", "_") for c in df.columns]
 
         df.rename(columns={
@@ -30,6 +33,9 @@ def fetch_from_stoxx():
         df["subsector"] = ""
         df["weight"] = ""
 
+        if "ticker" not in df.columns:
+            df["ticker"] = ""
+
         return df[["company", "ticker", "isin", "country", "sector", "subsector", "weight"]]
 
     except Exception:
@@ -38,25 +44,67 @@ def fetch_from_stoxx():
 
 def fetch_from_investing():
     """Fallback scraping from Investing.com."""
-    headers = {"User-Agent": "Mozilla/5.0"}
-    response = requests.get(URL_FALLBACK, headers=headers, timeout=10)
-    soup = BeautifulSoup(response.text, "html.parser")
+    try:
+        headers = {"User-Agent": "Mozilla/5.0"}
+        response = requests.get(URL_FALLBACK, headers=headers, timeout=10)
+        soup = BeautifulSoup(response.text, "html.parser")
 
-    table = soup.find("table")
-    df = pd.read_html(str(table))[0]
+        table = soup.find("table")
+        if table is None:
+            return None
 
-    df.rename(columns={
-        "Name": "company",
-        "Symbol": "ticker"
-    }, inplace=True)
+        df = pd.read_html(StringIO(str(table)))[0]
 
-    df["isin"] = ""
-    df["country"] = ""
-    df["sector"] = ""
-    df["subsector"] = ""
-    df["weight"] = ""
+        df.rename(columns={
+            "Name": "company",
+            "Symbol": "ticker"
+        }, inplace=True)
 
-    return df[["company", "ticker", "isin", "country", "sector", "subsector", "weight"]]
+        df["isin"] = ""
+        df["country"] = ""
+        df["sector"] = ""
+        df["subsector"] = ""
+        df["weight"] = ""
+
+        return df[["company", "ticker", "isin", "country", "sector", "subsector", "weight"]]
+
+    except Exception:
+        return None
+
+
+def fetch_from_wikipedia():
+    """Fallback final: scraping da Wikipedia (sempre disponível)."""
+    try:
+        headers = {"User-Agent": "Mozilla/5.0"}
+        response = requests.get(URL_WIKIPEDIA, headers=headers, timeout=10)
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        # A Wikipedia tem várias tabelas, procuramos a que tem "Ticker"
+        tables = soup.find_all("table", {"class": "wikitable"})
+        for table in tables:
+            df = pd.read_html(StringIO(str(table)))[0]
+            if "Ticker" in df.columns or "ticker" in df.columns:
+                df.columns = [c.strip() for c in df.columns]
+                df.rename(columns={
+                    "Company": "company",
+                    "Ticker": "ticker",
+                    "ISIN": "isin",
+                    "Country": "country",
+                    "Sector": "sector",
+                    "Sub-sector": "subsector"
+                }, inplace=True)
+
+                for col in ["company", "ticker", "isin", "country", "sector", "subsector"]:
+                    if col not in df.columns:
+                        df[col] = ""
+
+                df["weight"] = ""
+                return df[["company", "ticker", "isin", "country", "sector", "subsector", "weight"]]
+
+        return None
+
+    except Exception:
+        return None
 
 
 def fetch_stoxx50_data():
@@ -67,15 +115,23 @@ def fetch_stoxx50_data():
         print("✔ Data loaded from STOXX official website")
         return df
 
-    print("⚠ Official source failed, using fallback...")
+    print("⚠ Official source failed, trying Investing.com...")
     df = fetch_from_investing()
-    print("✔ Data loaded from Investing.com")
-    return df
+    if df is not None:
+        print("✔ Data loaded from Investing.com")
+        return df
+
+    print("⚠ Investing.com failed, trying Wikipedia...")
+    df = fetch_from_wikipedia()
+    if df is not None:
+        print("✔ Data loaded from Wikipedia")
+        return df
+
+    raise RuntimeError("❌ All sources failed. Could not fetch STOXX 50 data.")
 
 
 def save_all_formats(df):
     timestamp = datetime.utcnow().isoformat()
-
     df["last_update"] = timestamp
 
     df.to_csv("data/stoxx50.csv", index=False)
@@ -101,5 +157,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
