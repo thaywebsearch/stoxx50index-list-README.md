@@ -23,7 +23,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install requests beautifulsoup4 pandas lxml
+          pip install requests beautifulsoup4 pandas lxml html5lib
 
       - name: Run update script
         run: python scripts/update_stoxx50.py
