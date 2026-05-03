@@ -1,4 +1,5 @@
 company,ticker,isin,country,sector,subsector,weight,last_update
+company,ticker,isin,country,sector,subsector,weight
 Nestlé,NESN,CH0038863350,Switzerland,Food Beverage & Tobacco,Food Products,6.23
 ASML Holding,ASML,NL0010273215,Netherlands,Technology,Semiconductors,5.44
 Novo Nordisk B,NOVO-B,DK0060534915,Denmark,Health Care,Pharmaceuticals,4.98
@@ -49,4 +50,6 @@ Adyen,ADYEN,NL0012969182,Netherlands,Industrial Goods & Services,Payment Service
 Deutsche Post,DPW,DE0005552004,Germany,Industrial Goods & Services,Logistics,0.89
 BASF,BAS,DE000BASF111,Germany,Chemicals,Specialty Chemicals,0.84
 Kering,KER,FR0000121485,France,Consumer Products & Services,Luxury Goods,0.78
+
+
 
