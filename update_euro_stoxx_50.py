@@ -17,7 +17,10 @@ FILE_PATH = "euro-stoxx-50-table/euro-stoxx-50-table.md"
 
 def fetch_euro_stoxx_50_data(retries=3, backoff=2):
     url = "https://en.wikipedia.org/wiki/EURO_STOXX_50"
-    headers = {
+    
+    # User-Agent altamente específico conforme a política da Wikipédia
+    # Inclui o nome do script e um contacto genérico (pode ser o link do repo)
+    request_headers = { # Renomeado para evitar conflito
         'User-Agent': 'EuroStoxx50Bot/1.0 (https://github.com/thaywebsearch/euro-stoxx-50-list; mailto:admin@example.com) python-requests/2.31.0',
         'Accept-Language': 'en-US,en;q=0.9',
     }
@@ -25,7 +28,7 @@ def fetch_euro_stoxx_50_data(retries=3, backoff=2):
     for attempt in range(retries):
         try:
             logging.info(f"Tentativa {attempt + 1}: Acedendo à Wikipédia para Euro Stoxx 50...")
-            response = requests.get(url, headers=headers, timeout=20)
+            response = requests.get(url, headers=request_headers, timeout=20) # Usar request_headers
             response.raise_for_status()
             
             soup = BeautifulSoup(response.text, "html.parser")
@@ -48,10 +51,10 @@ def fetch_euro_stoxx_50_data(retries=3, backoff=2):
             
             if not table:
                 # Fallback: procurar por qualquer tabela que contenha 'Ticker' e 'Name'
-                tables = soup.find_all('table', class_='wikitable') # Muitas tabelas são 'wikitable'
+                tables = soup.find_all("table", class_="wikitable") # Muitas tabelas são 'wikitable'
                 for t in tables:
-                    headers = [th.get_text(strip=True) for th in t.find_all('th')]
-                    if 'Ticker' in headers and 'Name' in headers:
+                    table_headers = [th.get_text(strip=True) for th in t.find_all("th")] # Renomeado para evitar conflito
+                    if "Ticker" in table_headers and "Name" in table_headers:
                         table = t
                         break
 
