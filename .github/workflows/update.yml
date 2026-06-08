@@ -1,37 +1,62 @@
-name: Update STOXX 50 Dataset
+name: update
 
 on:
   schedule:
-    - cron: "0 6 * * 1"   # Atualiza todas as segundas às 06:00 UTC
-  workflow_dispatch:       # Permite correr manualmente
-
-permissions:
-  contents: write          # Necessário para commits automáticos
+    # Executar diariamente às 10:00 UTC (11:00 CET)
+    - cron: '0 10 * * *'
+  workflow_dispatch:  # Permite execução manual
 
 jobs:
   update:
     runs-on: ubuntu-latest
-
+    
     steps:
+      - name: Set up job
+        run: echo "Starting Euro Stoxx 50 update job"
+
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
+          python-version: '3.11'
 
       - name: Install dependencies
         run: |
-          pip install requests beautifulsoup4 pandas lxml html5lib
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4 pandas lxml
 
-      - name: Run update script
-        run: python scripts/update_stoxx50.py
+      - name: Run Euro Stoxx 50 update script
+        run: |
+          python update_euro_stoxx_50.py
+        env:
+          PYTHONUNBUFFERED: 1
+
+      - name: Check if data changed
+        id: check_changes
+        run: |
+          if git diff --quiet euro_stoxx_50.csv; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "[INFO] Nenhuma alteração nos dados"
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "[INFO] Dados foram atualizados"
+          fi
 
       - name: Commit and push changes
+        if: steps.check_changes.outputs.changed == 'true'
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "actions@github.com"
-          git add data/*
-          git commit -m "Auto-update STOXX 50 dataset" || echo "No changes to commit"
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add euro_stoxx_50.csv
+          git commit -m "chore: update Euro Stoxx 50 data - $(date +'%Y-%m-%d %H:%M:%S')"
           git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Job completed
+        if: always()
+        run: echo "[INFO] Euro Stoxx 50 update job completed at $(date)"
