@@ -1,144 +1,157 @@
+#!/usr/bin/env python3
+"""
+Script para atualizar a tabela do Euro Stoxx 50 a partir da Wikipédia.
+Corrige o erro anterior ao processar corretamente o HTML da tabela.
+"""
+
 import requests
 import pandas as pd
 from bs4 import BeautifulSoup
-import logging
-import os
-import re
-import time
+import csv
+from datetime import datetime
+import sys
 
-# Configuração de logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[logging.StreamHandler()]
-)
-
-FILE_PATH = "euro-stoxx-50-table/euro-stoxx-50-table.md"
-
-def fetch_euro_stoxx_50_data(retries=3, backoff=2):
-    url = "https://en.wikipedia.org/wiki/EURO_STOXX_50"
-    
-    # User-Agent altamente específico conforme a política da Wikipédia
-    # Inclui o nome do script e um contacto genérico (pode ser o link do repo)
-    request_headers = { # Renomeado para evitar conflito
-        'User-Agent': 'EuroStoxx50Bot/1.0 (https://github.com/thaywebsearch/euro-stoxx-50-list; mailto:admin@example.com) python-requests/2.31.0',
-        'Accept-Language': 'en-US,en;q=0.9',
-    }
-    
-    for attempt in range(retries):
-        try:
-            logging.info(f"Tentativa {attempt + 1}: Acedendo à Wikipédia para Euro Stoxx 50...")
-            response = requests.get(url, headers=request_headers, timeout=20) # Usar request_headers
-            response.raise_for_status()
-            
-            soup = BeautifulSoup(response.text, "html.parser")
-            
-            # A tabela de constituintes não tem um ID específico, mas está sob um cabeçalho "Composition"
-            # Vamos procurar pelo cabeçalho e depois pela tabela seguinte
-            composition_heading = soup.find("span", {"id": "Composition"})
-            if not composition_heading:
-                composition_heading = soup.find("span", string="Composition") # Fallback para texto
-
-            table = None
-            if composition_heading:
-                # Encontrar a próxima tabela após o cabeçalho de composição
-                current_element = composition_heading.find_parent().find_next_sibling()
-                while current_element:
-                    if current_element.name == "table":
-                        table = current_element
-                        break
-                    current_element = current_element.find_next_sibling()
-            
-            if not table:
-                # Fallback: procurar por qualquer tabela que contenha 'Ticker' e 'Name'
-                tables = soup.find_all("table", class_="wikitable") # Muitas tabelas são 'wikitable'
-                for t in tables:
-                    table_headers = [th.get_text(strip=True) for th in t.find_all("th")] # Renomeado para evitar conflito
-                    if "Ticker" in table_headers and "Name" in table_headers:
-                        table = t
-                        break
-
-            if not table:
-                raise ValueError("Não foi possível localizar a tabela de constituintes do Euro Stoxx 50 na página.")
-
-            df = pd.read_html(str(table))[0]
-            df.columns = [str(c).strip() for c in df.columns]
-            
-            logging.info(f"Sucesso! {len(df)} empresas encontradas para Euro Stoxx 50.")
-            return df
-
-        except Exception as e:
-            logging.error(f"Erro na tentativa {attempt + 1} de obter dados do Euro Stoxx 50: {e}")
-            if attempt < retries - 1:
-                time.sleep(backoff * (attempt + 1))
-            else:
-                raise
-
-def generate_markdown_table(df):
-    # Mapear nomes de colunas esperados para os nomes reais no DataFrame
-    col_map = {
-        'Ticker': next((c for c in df.columns if 'Ticker' in c), None),
-        'Name': next((c for c in df.columns if 'Name' in c), None),
-        'Country': next((c for c in df.columns if 'Registered office' in c or 'Country' in c), None),
-        'Sector': next((c for c in df.columns if 'Sector' in c), None),
-    }
-    
-    if not all(col_map.values()):
-        logging.error(f"Colunas detetadas: {df.columns.tolist()}")
-        raise KeyError(f"Não foi possível mapear todas as colunas necessárias. Mapeamento: {col_map}")
-
-    header = "| Company | Ticker | Country | Sector | Last Update |\n"
-    separator = "| :--- | :--- | :--- | :--- | :--- |\n"
-    rows = []
-    
-    current_time = pd.Timestamp.now().isoformat()
-
-    for _, row in df.iterrows():
-        company = str(row[col_map['Name']]).replace('\n', '').strip()
-        ticker = str(row[col_map['Ticker']]).replace('\n', '').strip()
-        country = str(row[col_map['Country']]).replace('\n', '').strip()
-        sector = str(row[col_map['Sector']]).replace('\n', '').strip()
-        
-        rows.append(f"| {company} | {ticker} | {country} | {sector} | {current_time} |")
-    
-    return header + separator + "\n".join(rows) + "\n"
-
-def main():
-    logging.info("A iniciar atualização da tabela Euro Stoxx 50...")
+def fetch_euro_stoxx_50():
+    """
+    Extrai a tabela do Euro Stoxx 50 da Wikipédia.
+    """
+    url = "https://en.wikipedia.org/wiki/Euro_Stoxx_50"
     
     try:
-        df = fetch_euro_stoxx_50_data()
-        new_table_content = generate_markdown_table(df)
+        # Headers para simular um browser
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        }
         
-        if os.path.exists(FILE_PATH):
-            with open(FILE_PATH, "r", encoding="utf-8") as f:
-                content = f.read()
-        else:
-            content = "# Euro Stoxx 50 — Tabela Completa\n\n"
-            os.makedirs(os.path.dirname(FILE_PATH), exist_ok=True)
-
-        # Regex para encontrar a tabela existente (se houver)
-        table_regex = re.compile(r"\| Company \| Ticker \|.*?\n\| :--- \|.*?\n(\|.*?\n)*", re.DOTALL)
+        response = requests.get(url, headers=headers, timeout=30)
+        response.raise_for_status()
         
-        if table_regex.search(content):
-            logging.info("Tabela existente encontrada. A substituir...")
-            updated_content = table_regex.sub(new_table_content, content)
-        else:
-            logging.info("Tabela não encontrada. A anexar ao final do ficheiro.")
-            updated_content = content.rstrip() + "\n\n" + new_table_content
+        print(f"[INFO] Página obtida com sucesso. Status: {response.status_code}")
+        
+        # Parse HTML
+        soup = BeautifulSoup(response.content, 'html.parser')
+        
+        # Encontrar todas as tabelas
+        tables = soup.find_all('table', {'class': 'wikitable'})
+        print(f"[INFO] Encontradas {len(tables)} tabelas na página")
+        
+        if not tables:
+            print("[ERROR] Nenhuma tabela wikitable encontrada")
+            return None
+        
+        # Procurar pela tabela de composição (a que tem Ticker, Name, etc.)
+        composition_table = None
+        for table in tables:
+            headers_row = table.find('tr')
+            if headers_row:
+                headers_text = headers_row.get_text().lower()
+                if 'ticker' in headers_text and 'name' in headers_text:
+                    composition_table = table
+                    break
+        
+        if not composition_table:
+            # Se não encontrar pela palavra-chave, usar a primeira tabela grande
+            print("[INFO] Tabela de composição não encontrada pelo padrão, usando primeira tabela grande")
+            for table in tables:
+                rows = table.find_all('tr')
+                if len(rows) > 40:  # A tabela do Euro Stoxx 50 tem ~50 empresas
+                    composition_table = table
+                    break
+        
+        if not composition_table:
+            print("[ERROR] Não foi possível identificar a tabela de composição")
+            return None
+        
+        # Extrair dados da tabela
+        data = []
+        rows = composition_table.find_all('tr')[1:]  # Pular o header
+        
+        print(f"[INFO] Processando {len(rows)} linhas da tabela")
+        
+        for row in rows:
+            cols = row.find_all('td')
+            if len(cols) < 5:  # Tabela deve ter pelo menos 5 colunas
+                continue
             
-        os.makedirs(os.path.dirname(FILE_PATH), exist_ok=True)
-        with open(FILE_PATH, "w", encoding="utf-8") as f:
-            f.write(updated_content)
-            
-        logging.info("Atualização da tabela Euro Stoxx 50 concluída com sucesso!")
-
+            try:
+                # Extrair dados das colunas
+                ticker = cols[0].get_text(strip=True)
+                main_listing = cols[1].get_text(strip=True) if len(cols) > 1 else ""
+                name = cols[2].get_text(strip=True) if len(cols) > 2 else ""
+                corporate_form = cols[3].get_text(strip=True) if len(cols) > 3 else ""
+                registered_office = cols[4].get_text(strip=True) if len(cols) > 4 else ""
+                sector = cols[5].get_text(strip=True) if len(cols) > 5 else ""
+                founded = cols[6].get_text(strip=True) if len(cols) > 6 else ""
+                
+                # Limpar dados
+                ticker = ticker.split('[')[0].strip() if '[' in ticker else ticker
+                name = name.split('[')[0].strip() if '[' in name else name
+                
+                if ticker and name:
+                    data.append({
+                        'Ticker': ticker,
+                        'Main Listing': main_listing,
+                        'Name': name,
+                        'Corporate Form': corporate_form,
+                        'Registered Office': registered_office,
+                        'Sector': sector,
+                        'Founded': founded
+                    })
+            except Exception as e:
+                print(f"[WARNING] Erro ao processar linha: {e}")
+                continue
+        
+        print(f"[INFO] {len(data)} empresas extraídas com sucesso")
+        
+        if not data:
+            print("[ERROR] Nenhum dado foi extraído da tabela")
+            return None
+        
+        return pd.DataFrame(data)
+    
+    except requests.exceptions.RequestException as e:
+        print(f"[ERROR] Erro ao obter a página: {e}")
+        return None
     except Exception as e:
-        logging.critical(f"Falha no script de atualização do Euro Stoxx 50: {e}")
-        import traceback
-        logging.error(traceback.format_exc())
-        exit(1)
+        print(f"[ERROR] Erro inesperado: {e}")
+        return None
 
-if __name__ == "__main__":
+def save_to_csv(df, filename='euro_stoxx_50.csv'):
+    """
+    Salva o DataFrame em CSV.
+    """
+    try:
+        df.to_csv(filename, index=False, encoding='utf-8')
+        print(f"[INFO] Dados salvos em {filename}")
+        print(f"[INFO] Total de registos: {len(df)}")
+        return True
+    except Exception as e:
+        print(f"[ERROR] Erro ao salvar CSV: {e}")
+        return False
+
+def main():
+    """
+    Função principal.
+    """
+    print(f"[INFO] Iniciando atualização da tabela Euro Stoxx 50 - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    
+    # Obter dados
+    df = fetch_euro_stoxx_50()
+    
+    if df is None or df.empty:
+        print("[ERROR] Falha ao obter dados do Euro Stoxx 50")
+        sys.exit(1)
+    
+    # Salvar em CSV
+    if not save_to_csv(df):
+        sys.exit(1)
+    
+    # Exibir amostra
+    print("\n[INFO] Amostra dos dados:")
+    print(df.head(10).to_string())
+    
+    print(f"\n[INFO] Atualização concluída com sucesso!")
+    sys.exit(0)
+
+if __name__ == '__main__':
     main()
-
