@@ -2,53 +2,53 @@
 
 | Company | Ticker | Country | Sector | Last Update |
 | :--- | :--- | :--- | :--- | :--- |
-| adidas AG | ADS.DE | Germany | Consumer Cyclical | 2026-06-19T11:25:34.830913 |
-| Adyen N.V. | ADYEN.AS | Netherlands | Technology | 2026-06-19T11:25:34.830913 |
-| Koninklijke Ahold Delhaize N.V. | AD.AS | Netherlands | Consumer Defensive | 2026-06-19T11:25:34.830913 |
-| L'Air Liquide S.A. | AI.PA | France | Basic Materials | 2026-06-19T11:25:34.830913 |
-| Airbus SE | AIR.PA | Netherlands | Industrials | 2026-06-19T11:25:34.830913 |
-| Allianz SE | ALV.DE | Germany | Financial Services | 2026-06-19T11:25:34.830913 |
-| Anheuser-Busch InBev SA/NV | ABI.BR | Belgium | Consumer Defensive | 2026-06-19T11:25:34.830913 |
-| argenx SE | ARGX.BR | Netherlands | Healthcare | 2026-06-19T11:25:34.830913 |
-| ASML Holding N.V. | ASML.AS | Netherlands | Technology | 2026-06-19T11:25:34.830913 |
-| AXA SA | CS.PA | France | Financial Services | 2026-06-19T11:25:34.830913 |
-| BASF SE | BAS.DE | Germany | Basic Materials | 2026-06-19T11:25:34.830913 |
-| Bayer Aktiengesellschaft | BAYN.DE | Germany | Healthcare | 2026-06-19T11:25:34.830913 |
-| Banco Bilbao Vizcaya Argentaria, S.A. | BBVA.MC | Spain | Financial Services | 2026-06-19T11:25:34.830913 |
-| Banco Santander, S.A. | SAN.MC | Spain | Financial Services | 2026-06-19T11:25:34.830913 |
-| Bayerische Motoren Werke Aktiengesellschaft | BMW.DE | Germany | Consumer Cyclical | 2026-06-19T11:25:34.830913 |
-| BNP Paribas SA | BNP.PA | France | Financial Services | 2026-06-19T11:25:34.830913 |
-| Danone S.A. | BN.PA | France | Consumer Defensive | 2026-06-19T11:25:34.830913 |
-| Deutsche Bank Aktiengesellschaft | DBK.DE | Germany | Financial Services | 2026-06-19T11:25:34.830913 |
-| Deutsche Börse AG | DB1.DE | Germany | Financial Services | 2026-06-19T11:25:34.830913 |
-| Deutsche Post AG | DHL.DE | Germany | Industrials | 2026-06-19T11:25:34.830913 |
-| Deutsche Telekom AG | DTE.DE | Germany | Communication Services | 2026-06-19T11:25:34.830913 |
-| Enel SpA | ENEL.MI | Italy | Utilities | 2026-06-19T11:25:34.830913 |
-| Eni S.p.A. | ENI.MI | Italy | Energy | 2026-06-19T11:25:34.830913 |
-| EssilorLuxottica Société anonyme | EL.PA | France | Healthcare | 2026-06-19T11:25:34.830913 |
-| Ferrari N.V. | RACE.MI | Italy | Consumer Cyclical | 2026-06-19T11:25:34.830913 |
-| Hermès International Société en commandite par actions | RMS.PA | France | Consumer Cyclical | 2026-06-19T11:25:34.830913 |
-| Iberdrola, S.A. | IBE.MC | Spain | Utilities | 2026-06-19T11:25:34.830913 |
-| Industria de Diseño Textil, S.A. | ITX.MC | Spain | Consumer Cyclical | 2026-06-19T11:25:34.830913 |
-| Infineon Technologies AG | IFX.DE | Germany | Technology | 2026-06-19T11:25:34.830913 |
-| ING Groep N.V. | INGA.AS | Netherlands | Financial Services | 2026-06-19T11:25:34.830913 |
-| Intesa Sanpaolo S.p.A. | ISP.MI | Italy | Financial Services | 2026-06-19T11:25:34.830913 |
-| L'Oréal S.A. | OR.PA | France | Consumer Defensive | 2026-06-19T11:25:34.830913 |
-| LVMH Moët Hennessy - Louis Vuitton, Société Européenne | MC.PA | France | Consumer Cyclical | 2026-06-19T11:25:34.830913 |
-| Mercedes-Benz Group AG | MBG.DE | Germany | Consumer Cyclical | 2026-06-19T11:25:34.830913 |
-| Münchener Rückversicherungs-Gesellschaft Aktiengesellschaft in München | MUV2.DE | Germany | Financial Services | 2026-06-19T11:25:34.830913 |
-| Nordea Bank Abp | NDA-FI.HE | Finland | Financial Services | 2026-06-19T11:25:34.830913 |
-| Prosus N.V. | PRX.AS | Netherlands | Consumer Cyclical | 2026-06-19T11:25:34.830913 |
-| Rheinmetall AG | RHM.DE | Germany | Industrials | 2026-06-19T11:25:34.830913 |
-| Safran SA | SAF.PA | France | Industrials | 2026-06-19T11:25:34.830913 |
-| Compagnie de Saint-Gobain S.A. | SGO.PA | France | Industrials | 2026-06-19T11:25:34.830913 |
-| Sanofi | SAN.PA | France | Healthcare | 2026-06-19T11:25:34.830913 |
-| SAP SE | SAP.DE | Germany | Technology | 2026-06-19T11:25:34.830913 |
-| Schneider Electric S.E. | SU.PA | France | Industrials | 2026-06-19T11:25:34.830913 |
-| Siemens Aktiengesellschaft | SIE.DE | Germany | Industrials | 2026-06-19T11:25:34.830913 |
-| Siemens Energy AG | ENR.DE | Germany | Industrials | 2026-06-19T11:25:34.830913 |
-| TotalEnergies SE | TTE.PA | France | Energy | 2026-06-19T11:25:34.830913 |
-| Vinci SA | DG.PA | France | Industrials | 2026-06-19T11:25:34.830913 |
-| UniCredit S.p.A. | UCG.MI | Italy | Financial Services | 2026-06-19T11:25:34.830913 |
-| Volkswagen AG | VOW.DE | Germany | Consumer Cyclical | 2026-06-19T11:25:34.830913 |
-| Wolters Kluwer N.V. | WKL.AS | Netherlands | Industrials | 2026-06-19T11:25:34.830913 |
+| adidas AG | ADS.DE | Germany | Consumer Cyclical | 2026-06-20T10:09:56.601367 |
+| Adyen N.V. | ADYEN.AS | Netherlands | Technology | 2026-06-20T10:09:56.601367 |
+| Koninklijke Ahold Delhaize N.V. | AD.AS | Netherlands | Consumer Defensive | 2026-06-20T10:09:56.601367 |
+| L'Air Liquide S.A. | AI.PA | France | Basic Materials | 2026-06-20T10:09:56.601367 |
+| Airbus SE | AIR.PA | Netherlands | Industrials | 2026-06-20T10:09:56.601367 |
+| Allianz SE | ALV.DE | Germany | Financial Services | 2026-06-20T10:09:56.601367 |
+| Anheuser-Busch InBev SA/NV | ABI.BR | Belgium | Consumer Defensive | 2026-06-20T10:09:56.601367 |
+| argenx SE | ARGX.BR | Netherlands | Healthcare | 2026-06-20T10:09:56.601367 |
+| ASML Holding N.V. | ASML.AS | Netherlands | Technology | 2026-06-20T10:09:56.601367 |
+| AXA SA | CS.PA | France | Financial Services | 2026-06-20T10:09:56.601367 |
+| BASF SE | BAS.DE | Germany | Basic Materials | 2026-06-20T10:09:56.601367 |
+| Bayer Aktiengesellschaft | BAYN.DE | Germany | Healthcare | 2026-06-20T10:09:56.601367 |
+| Banco Bilbao Vizcaya Argentaria, S.A. | BBVA.MC | Spain | Financial Services | 2026-06-20T10:09:56.601367 |
+| Banco Santander, S.A. | SAN.MC | Spain | Financial Services | 2026-06-20T10:09:56.601367 |
+| Bayerische Motoren Werke Aktiengesellschaft | BMW.DE | Germany | Consumer Cyclical | 2026-06-20T10:09:56.601367 |
+| BNP Paribas SA | BNP.PA | France | Financial Services | 2026-06-20T10:09:56.601367 |
+| Danone S.A. | BN.PA | France | Consumer Defensive | 2026-06-20T10:09:56.601367 |
+| Deutsche Bank Aktiengesellschaft | DBK.DE | Germany | Financial Services | 2026-06-20T10:09:56.601367 |
+| Deutsche Börse AG | DB1.DE | Germany | Financial Services | 2026-06-20T10:09:56.601367 |
+| Deutsche Post AG | DHL.DE | Germany | Industrials | 2026-06-20T10:09:56.601367 |
+| Deutsche Telekom AG | DTE.DE | Germany | Communication Services | 2026-06-20T10:09:56.601367 |
+| Enel SpA | ENEL.MI | Italy | Utilities | 2026-06-20T10:09:56.601367 |
+| Eni S.p.A. | ENI.MI | Italy | Energy | 2026-06-20T10:09:56.601367 |
+| EssilorLuxottica Société anonyme | EL.PA | France | Healthcare | 2026-06-20T10:09:56.601367 |
+| Ferrari N.V. | RACE.MI | Italy | Consumer Cyclical | 2026-06-20T10:09:56.601367 |
+| Hermès International Société en commandite par actions | RMS.PA | France | Consumer Cyclical | 2026-06-20T10:09:56.601367 |
+| Iberdrola, S.A. | IBE.MC | Spain | Utilities | 2026-06-20T10:09:56.601367 |
+| Industria de Diseño Textil, S.A. | ITX.MC | Spain | Consumer Cyclical | 2026-06-20T10:09:56.601367 |
+| Infineon Technologies AG | IFX.DE | Germany | Technology | 2026-06-20T10:09:56.601367 |
+| ING Groep N.V. | INGA.AS | Netherlands | Financial Services | 2026-06-20T10:09:56.601367 |
+| Intesa Sanpaolo S.p.A. | ISP.MI | Italy | Financial Services | 2026-06-20T10:09:56.601367 |
+| L'Oréal S.A. | OR.PA | France | Consumer Defensive | 2026-06-20T10:09:56.601367 |
+| LVMH Moët Hennessy - Louis Vuitton, Société Européenne | MC.PA | France | Consumer Cyclical | 2026-06-20T10:09:56.601367 |
+| Mercedes-Benz Group AG | MBG.DE | Germany | Consumer Cyclical | 2026-06-20T10:09:56.601367 |
+| Münchener Rückversicherungs-Gesellschaft Aktiengesellschaft in München | MUV2.DE | Germany | Financial Services | 2026-06-20T10:09:56.601367 |
+| Nordea Bank Abp | NDA-FI.HE | Finland | Financial Services | 2026-06-20T10:09:56.601367 |
+| Prosus N.V. | PRX.AS | Netherlands | Consumer Cyclical | 2026-06-20T10:09:56.601367 |
+| Rheinmetall AG | RHM.DE | Germany | Industrials | 2026-06-20T10:09:56.601367 |
+| Safran SA | SAF.PA | France | Industrials | 2026-06-20T10:09:56.601367 |
+| Compagnie de Saint-Gobain S.A. | SGO.PA | France | Industrials | 2026-06-20T10:09:56.601367 |
+| Sanofi | SAN.PA | France | Healthcare | 2026-06-20T10:09:56.601367 |
+| SAP SE | SAP.DE | Germany | Technology | 2026-06-20T10:09:56.601367 |
+| Schneider Electric S.E. | SU.PA | France | Industrials | 2026-06-20T10:09:56.601367 |
+| Siemens Aktiengesellschaft | SIE.DE | Germany | Industrials | 2026-06-20T10:09:56.601367 |
+| Siemens Energy AG | ENR.DE | Germany | Industrials | 2026-06-20T10:09:56.601367 |
+| TotalEnergies SE | TTE.PA | France | Energy | 2026-06-20T10:09:56.601367 |
+| Vinci SA | DG.PA | France | Industrials | 2026-06-20T10:09:56.601367 |
+| UniCredit S.p.A. | UCG.MI | Italy | Financial Services | 2026-06-20T10:09:56.601367 |
+| Volkswagen AG | VOW.DE | Germany | Consumer Cyclical | 2026-06-20T10:09:56.601367 |
+| Wolters Kluwer N.V. | WKL.AS | Netherlands | Industrials | 2026-06-20T10:09:56.601367 |
